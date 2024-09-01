@@ -11,7 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatDialogModule } from '@angular/material/dialog';
 import { DialogAddPlayerComponent } from '../dialog-add-player/dialog-add-player.component';
-import { GameInfoComponent } from "../game-info/game-info.component";
+import { GameInfoComponent } from '../game-info/game-info.component';
 
 @Component({
   selector: 'app-game',
@@ -26,8 +26,8 @@ import { GameInfoComponent } from "../game-info/game-info.component";
     MatInputModule,
     FormsModule,
     MatDialogModule,
-    GameInfoComponent
-],
+    GameInfoComponent,
+  ],
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss',
 })
@@ -35,6 +35,7 @@ export class GameComponent {
   pickCardAnimation = false;
   currentCard: string = '';
   game!: Game;
+  maxPlayers = 4;
 
   constructor(public dialog: MatDialog) {}
 
@@ -51,6 +52,8 @@ export class GameComponent {
       this.currentCard = this.game.stack.pop() || '';
       this.pickCardAnimation = true;
 
+      this.game.currentPlayer++;
+      this.game.currentPlayer =  this.game.currentPlayer %  this.game.players.length;
       setTimeout(() => {
         this.game.playedCards.push(this.currentCard);
         this.pickCardAnimation = false;
@@ -59,10 +62,14 @@ export class GameComponent {
   }
 
   openDialog(): void {
+    if (this.game.players.length >= this.maxPlayers) {
+      alert('No more than 4 players allowed.');
+      return;
+    }
     const dialogRef = this.dialog.open(DialogAddPlayerComponent);
 
     dialogRef.afterClosed().subscribe((name: string) => {
-    this.game.players.push(name);
+      this.game.players.push(name);
     });
   }
 }
