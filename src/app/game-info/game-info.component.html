@@ -1,6 +1,6 @@
 <mat-card appearance="outlined">
   <mat-card-title style="left: 15px; position: relative">{{
-    card ? title : 'Please pick a card'
+    card ? title : 'Please pick a card.'
   }}</mat-card-title>
-  <mat-card-content>{{ description }}</mat-card-content>
+  <mat-card-content>{{ card ? description : 'Please click on the card stack to pick a card.' }}</mat-card-content>
 </mat-card>
